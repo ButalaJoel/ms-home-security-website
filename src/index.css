@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* Brand colours sampled from the MS Home Security logo, same as the POS. */
+@theme {
+  --color-brand: #00a9e8;
+  --color-brand-dark: #0088bd;
+  --color-brand-soft: #e3f5fc;
+  --color-navy: #303080;
+  --color-ink: #0b263b;
+  --color-ink-soft: #4a6273;
+  --color-paper: #f4f6f8;
+  --color-line: #e3e8ed;
+  --color-night: #05121d;
+  --color-ok: #138a52;
+  --color-warn: #b86a00;
+  /* Same font as the POS: Tailwind's default system font (Segoe UI on Windows, San Francisco on iPhone, Roboto on Android). */
+  --font-display: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: #fff; color: var(--color-ink); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.015em; }
+:focus-visible { outline: 2px solid var(--color-brand); outline-offset: 2px; }
+
+@keyframes drop-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@keyframes slide-in { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.anim-drop { animation: drop-in 0.2s ease; }
+.anim-slide { animation: slide-in 0.28s ease; }
+.anim-fade { animation: fade-in 0.45s ease; }
+.anim-rise { animation: rise-in 0.6s ease both; }
+
+/* Hide scrollbars on sideways card rows (still scrollable by touch, trackpad and the arrow buttons). */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Camera "live view" tiles in the slider */
+.scanline { background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px); }
+@keyframes blink { 50% { opacity: 0.25; } }
+.rec-dot { animation: blink 1.4s steps(1) infinite; }
+
+/* Fine dotted grid used on dark panels and cards */
+.dot-grid { background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px); background-size: 18px 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
