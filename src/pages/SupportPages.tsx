@@ -4,7 +4,6 @@ import { Clock, Mail, MapPin, MessageCircle, Newspaper, PackageSearch, Phone, St
 import { EmptyState, PageHero, SectionTitle, wrap } from "../components/common/PageParts.tsx";
 import RequestForm, { CONTACT_FIELDS } from "../components/common/RequestForm.tsx";
 import { useShop } from "../context/ShopContext.tsx";
-import { usingSampleData } from "../lib/api.ts";
 import { isUgPhone } from "../lib/forms.ts";
 import { telLink, whatsappLink } from "../lib/format.ts";
 
@@ -21,7 +20,7 @@ export function TrackOrderPage() {
     if (!/^WEB-\d{4}-\d{4,}$/i.test(ref.trim())) return setMsg({ tone: "error", text: "Order numbers look like WEB-2026-0001. You'll find it on your order confirmation." });
     if (!isUgPhone(phone)) return setMsg({ tone: "error", text: "Enter the phone number you used when ordering." });
     // Order tracking reads from the POS once the website is connected to it.
-    setMsg({ tone: "info", text: usingSampleData ? "Order tracking switches on when the website is connected to our shop system. For now, WhatsApp us your order number." : "Checking…" });
+    setMsg({ tone: "info", text: "Online order tracking is coming soon. For now, WhatsApp us your order number and we'll update you." });
   };
 
   return (
@@ -109,8 +108,8 @@ export function ContactPage() {
     ...business.phones.map(p => ({ icon: Phone, label: "Call", value: p, href: telLink(p) })),
     ...(business.whatsapp ? [{ icon: MessageCircle, label: "WhatsApp", value: "Chat with us", href: whatsappLink(business.whatsapp, "Hello MS Home Security, ") }] : []),
     ...(business.email ? [{ icon: Mail, label: "Email", value: business.email, href: "mailto:" + business.email }] : []),
-    { icon: MapPin, label: "Visit", value: business.address, href: "#map" },
-    { icon: Clock, label: "Opening hours", value: business.hours },
+    { icon: MapPin, label: "Visit", value: business.address, href: business.mapLink || "#map" },
+    ...(business.hours ? [{ icon: Clock, label: "Opening hours", value: business.hours }] : []),
   ];
   return (
     <>

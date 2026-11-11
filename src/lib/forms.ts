@@ -1,4 +1,4 @@
-import { usingSampleData } from "./api.ts";
+import { API_URL, usingSampleData } from "./api.ts";
 import { whatsappLink } from "./format.ts";
 
 // Every website form (installation, business quote, distributor, contact, feedback) goes through here.
@@ -17,19 +17,21 @@ export const KIND_LABEL: Record<RequestKind, string> = {
 
 export type SubmitResult = { ok: true; mode: "saved"; reference?: string } | { ok: true; mode: "whatsapp"; url: string } | { ok: false; error: string };
 
-const API_URL = (import.meta.env.VITE_POS_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
 
 export async function submitRequest(kind: RequestKind, fields: Record<string, string>, labels: Record<string, string>, whatsapp: string): Promise<SubmitResult> {
-  if (usingSampleData) {
+  const viaWhatsApp = (): SubmitResult => {
     const lines = Object.entries(fields).filter(([, v]) => v.trim()).map(([k, v]) => `${labels[k] ?? k}: ${v.trim()}`);
     return { ok: true, mode: "whatsapp", url: whatsappLink(whatsapp, `${KIND_LABEL[kind]}\n\n${lines.join("\n")}`) };
-  }
+  };
+  if (usingSampleData) return viaWhatsApp();
   try {
     const res = await fetch(API_URL + "/api/public/requests", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({ kind, fields }),
     });
+    // Until the POS has its Website inbox, requests go by WhatsApp instead.
+    if (res.status === 404) return viaWhatsApp();
     const body = (await res.json().catch(() => null)) as { success?: boolean; message?: string; reference?: string } | null;
     if (!res.ok || !body?.success) return { ok: false, error: body?.message || "We couldn't send that. Please try again or WhatsApp us." };
     return { ok: true, mode: "saved", reference: body.reference };

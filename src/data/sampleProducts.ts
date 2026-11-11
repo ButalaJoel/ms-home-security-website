@@ -1,6 +1,6 @@
 import type { PublicProduct } from "../lib/types.ts";
 
-// SAMPLE DATA ONLY, used while the POS server is offline or VITE_POS_API_URL is empty.
+// SAMPLE DATA ONLY, used when VITE_DATA_SOURCE is not "pos".
 // Names, categories, brands and prices are the 37 products imported into the POS on 3 Nov 2026.
 // SKUs and stock labels here are made up; the live site reads both from the POS.
 export const SAMPLE_PRODUCTS: PublicProduct[] = [

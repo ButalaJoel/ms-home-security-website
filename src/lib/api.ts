@@ -3,9 +3,14 @@ import { SAMPLE_PRODUCTS } from "../data/sampleProducts.ts";
 import { SAMPLE_BUSINESS } from "../data/sampleBusiness.ts";
 import { SAMPLE_HIKVISION } from "../data/sampleHikvision.ts";
 
-// Address of the POS server. Empty = use the sample data (until the POS public API is live).
-const API_URL = (import.meta.env.VITE_POS_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
-export const usingSampleData = !API_URL;
+// Where the data comes from:
+// - VITE_DATA_SOURCE=pos  → the POS server's /api/public endpoints.
+//   On Vercel the calls stay on the website's own address and vercel.json passes
+//   them to the POS server, so visitors never need to reach onrender.com.
+//   VITE_POS_API_URL is only for local testing (e.g. http://localhost:5000).
+// - anything else         → the built-in sample data in src/data.
+export const API_URL = ((import.meta.env.VITE_POS_API_URL as string | undefined) ?? "").replace(/\/$/, "");
+export const usingSampleData = import.meta.env.VITE_DATA_SOURCE !== "pos";
 
 interface ApiEnvelope { success: boolean; message?: string }
 

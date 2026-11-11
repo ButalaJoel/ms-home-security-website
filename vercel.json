@@ -1,3 +1,6 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api/public/:path*", "destination": "https://ms-home-security-pos.onrender.com/api/public/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

@@ -40,6 +40,8 @@ export interface BusinessDetails {
   momo: { network: string; number: string; name: string }[];
   installationTerms: string;
   warranty: string;
+  mapLink?: string;
+  social?: { facebook: string; instagram: string; tiktok: string };
 }
 
 export interface CartItem {

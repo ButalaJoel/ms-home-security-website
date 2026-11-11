@@ -57,7 +57,7 @@ export default function Footer() {
             )}
             {business.email && <li><a href={"mailto:" + business.email} className={link + " inline-flex items-center gap-2 break-all"}><Mail className="h-4 w-4 shrink-0 text-brand" />{business.email}</a></li>}
             <li className="flex items-start gap-2 text-white/60"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />{business.address}</li>
-            <li className="flex items-start gap-2 text-white/60"><Clock className="mt-0.5 h-4 w-4 shrink-0 text-brand" />{business.hours}</li>
+            {business.hours && <li className="flex items-start gap-2 text-white/60"><Clock className="mt-0.5 h-4 w-4 shrink-0 text-brand" />{business.hours}</li>}
           </ul>
         </div>
       </div>
