@@ -74,7 +74,7 @@ export default function ProductPage() {
             <p className={product.price > 0 ? "text-[28px] font-bold" : "text-[20px] font-semibold text-ink-soft"}>{formatUGX(product.price)}</p>
             <StockBadge stock={product.stock} />
           </div>
-          {product.price <= 0 && <p className="mt-1 text-[14px] text-ink-soft">Add it to your cart or ask on WhatsApp; we'll confirm the price when we call.</p>}
+          {product.price <= 0 && <p className="mt-1 text-[14px] text-ink-soft">Add it to your cart or ask on WhatsApp, and we'll send you our best price.</p>}
 
           {product.features && product.features.length > 0 && (
             <ul className="mt-6 space-y-2">

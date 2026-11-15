@@ -78,7 +78,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                   <span className="block truncate text-[14.5px] font-semibold text-ink">{p.name}</span>
                   <span className="block text-[12.5px] text-ink-soft">{p.category}</span>
                 </span>
-                <span className="shrink-0 text-[13px] font-semibold text-ink">{formatUGX(p.price)}</span>
+                {p.price > 0 && <span className="shrink-0 text-[13px] font-semibold text-ink">{formatUGX(p.price)}</span>}
               </button>
             ))
           )}

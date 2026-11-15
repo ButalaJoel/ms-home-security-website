@@ -139,7 +139,7 @@ export default function ProductsPage() {
               className="h-11 rounded-full border border-line bg-white px-4 text-[14px] outline-none focus:border-brand"
               aria-label="Sort by"
             >
-              {SORTS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+              {SORTS.filter(s => !s.value.startsWith("price") || products.some(p => p.price > 0)).map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
           </div>
 

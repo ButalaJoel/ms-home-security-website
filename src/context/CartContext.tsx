@@ -17,7 +17,8 @@ interface CartState {
 }
 
 const CartContext = createContext<CartState | null>(null);
-const STORAGE_KEY = "msh-cart-v1";
+// v2: prices stopped being published, so carts saved with old prices start fresh.
+const STORAGE_KEY = "msh-cart-v2";
 const MAX_QTY = 999;
 
 function loadCart(): CartItem[] {

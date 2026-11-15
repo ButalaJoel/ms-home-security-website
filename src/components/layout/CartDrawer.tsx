@@ -42,7 +42,7 @@ export default function CartDrawer() {
                   </Link>
                   <div className="min-w-0 flex-1">
                     <p className="text-[14px] font-semibold leading-snug text-ink">{item.name}</p>
-                    <p className="mt-0.5 text-[13px] text-ink-soft">{formatUGX(item.price)}</p>
+                    {item.price > 0 && <p className="mt-0.5 text-[13px] text-ink-soft">{formatUGX(item.price)}</p>}
                     <div className="mt-2 flex items-center justify-between">
                       <div className="inline-flex items-center rounded-full border border-line">
                         <button type="button" onClick={() => setQty(item.productId, item.qty - 1)} disabled={item.qty <= 1} className="flex h-8 w-8 items-center justify-center rounded-full disabled:opacity-30" aria-label="One less"><Minus className="h-3.5 w-3.5" /></button>
@@ -56,12 +56,14 @@ export default function CartDrawer() {
               ))}
             </ul>
             <div className="border-t border-line bg-paper px-6 py-5">
-              <div className="flex items-baseline justify-between">
-                <span className="text-sm text-ink-soft">Subtotal</span>
-                <span className="font-display text-xl font-bold">{subtotal > 0 ? formatUGX(subtotal) : "—"}</span>
-              </div>
-              <p className="mt-1.5 text-[12.5px] leading-relaxed text-ink-soft">
-                {hasPriceOnRequest ? "Some items are priced on request; we'll confirm the total when we call you. " : ""}
+              {subtotal > 0 && (
+                <div className="flex items-baseline justify-between">
+                  <span className="text-sm text-ink-soft">Subtotal</span>
+                  <span className="font-display text-xl font-bold">{formatUGX(subtotal)}</span>
+                </div>
+              )}
+              <p className={(subtotal > 0 ? "mt-1.5 " : "") + "text-[12.5px] leading-relaxed text-ink-soft"}>
+                {hasPriceOnRequest ? "Send us your list and we'll call you with prices for your order. " : ""}
                 No payment now. We call to confirm, then you pay by Mobile Money or on delivery.
               </p>
               <Link to="/checkout" onClick={close} className="mt-4 block rounded-full bg-brand py-3.5 text-center text-[15px] font-semibold text-white hover:bg-brand-dark">
