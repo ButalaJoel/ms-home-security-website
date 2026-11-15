@@ -10,11 +10,10 @@ import { InstallationPage, ProjectsPage } from "./pages/InstallationPages.tsx";
 import { ContactPage, FeedbackPage, NewsPage, ReviewsPage, TrackOrderPage } from "./pages/SupportPages.tsx";
 import { AboutPage, PrivacyPage } from "./pages/CompanyPages.tsx";
 import ComingNextPage, { NotFoundPage } from "./pages/ComingNextPage.tsx";
+import { CheckoutPage, OrderReceivedPage } from "./pages/CheckoutPages.tsx";
 
 // Every page from the feature map has its address now; pages not built yet show a placeholder.
 const NEXT: [path: string, title: string][] = [
-  ["/checkout", "Checkout"],
-  ["/order/:reference", "Order received"],
   ["/cctv-planner", "CCTV planner"],
 ];
 
@@ -35,6 +34,8 @@ export default function App() {
               <Route path="/installation" element={<InstallationPage />} />
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/track-order" element={<TrackOrderPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/order/:reference" element={<OrderReceivedPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/reviews" element={<ReviewsPage />} />
               <Route path="/feedback" element={<FeedbackPage />} />

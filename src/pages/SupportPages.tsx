@@ -1,55 +1,103 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Clock, Mail, MapPin, Newspaper, PackageSearch, Phone, Star } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
+import { CheckCircle2, Clock, Mail, MapPin, Newspaper, PackageSearch, Phone, Star } from "lucide-react";
 import { EmptyState, PageHero, SectionTitle, wrap } from "../components/common/PageParts.tsx";
 import RequestForm, { CONTACT_FIELDS } from "../components/common/RequestForm.tsx";
 import { useShop } from "../context/ShopContext.tsx";
 import { isUgPhone } from "../lib/forms.ts";
 import { telLink, whatsappLink } from "../lib/format.ts";
+import { STATUS_STEPS, trackOrder, type TrackedOrder } from "../lib/orders.ts";
 import WhatsAppIcon from "../components/common/WhatsAppIcon.tsx";
 
 const input = "w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] outline-none focus:border-brand focus:ring-2 focus:ring-brand/20";
 
 export function TrackOrderPage() {
   const { business } = useShop();
-  const [ref, setRef] = useState("");
+  const [params] = useSearchParams();
+  const [ref, setRef] = useState(() => (params.get("ref") ?? "").toUpperCase());
   const [phone, setPhone] = useState("");
+  const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ tone: "info" | "error"; text: string } | null>(null);
+  const [order, setOrder] = useState<TrackedOrder | null>(null);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setOrder(null);
     if (!/^WEB-\d{4}-\d{4,}$/i.test(ref.trim())) return setMsg({ tone: "error", text: "Order numbers look like WEB-2026-0001. You'll find it on your order confirmation." });
     if (!isUgPhone(phone)) return setMsg({ tone: "error", text: "Enter the phone number you used when ordering." });
-    // Order tracking reads from the POS once the website is connected to it.
-    setMsg({ tone: "info", text: "Online order tracking is coming soon. For now, WhatsApp us your order number and we'll update you." });
+    setBusy(true);
+    setMsg(null);
+    const res = await trackOrder(ref, phone);
+    setBusy(false);
+    if (res.ok) setOrder(res.order);
+    else setMsg({ tone: res.notLive ? "info" : "error", text: res.error });
+  };
+
+  const reached = order ? STATUS_STEPS.findIndex(s => s.status === order.status) : -1;
+  const when = (status: string) => {
+    const step = order?.history.filter(h => h.status === status).at(-1);
+    return step ? new Date(step.at).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Africa/Kampala" }) : "";
   };
 
   return (
     <>
       <PageHero crumbs={[{ label: "Support" }, { label: "Track my order" }]} title="Track your order" intro="Enter your order number and the phone number you used." />
-      <section className={wrap + " grid gap-10 py-16 lg:grid-cols-[1.1fr_0.9fr]"}>
-        <form onSubmit={onSubmit} noValidate className="space-y-4 rounded-2xl border border-line p-6 sm:p-8">
-          <PackageSearch className="h-8 w-8 text-brand" />
-          <div>
-            <label htmlFor="ref" className="mb-1.5 block text-[14px] font-semibold">Order number</label>
-            <input id="ref" value={ref} onChange={e => setRef(e.target.value.toUpperCase())} placeholder="WEB-2026-0001" className={input + " font-mono"} />
-          </div>
-          <div>
-            <label htmlFor="tphone" className="mb-1.5 block text-[14px] font-semibold">Phone number</label>
-            <input id="tphone" type="tel" inputMode="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="0772 123 456" className={input} />
-          </div>
-          {msg && <p role="status" className={"rounded-xl px-4 py-3 text-[14px] " + (msg.tone === "error" ? "bg-red-50 text-red-700" : "bg-brand-soft text-ink")}>{msg.text}</p>}
-          <button type="submit" className="rounded-full bg-brand px-7 py-3.5 text-[15px] font-semibold text-white hover:bg-brand-dark">Track order</button>
-        </form>
+      <section className={wrap + " grid items-start gap-10 py-16 lg:grid-cols-[1.1fr_0.9fr]"}>
+        <div className="space-y-6">
+          <form onSubmit={onSubmit} noValidate className="space-y-4 rounded-2xl border border-line p-6 sm:p-8">
+            <PackageSearch className="h-8 w-8 text-brand" />
+            <div>
+              <label htmlFor="ref" className="mb-1.5 block text-[14px] font-semibold">Order number</label>
+              <input id="ref" value={ref} onChange={e => setRef(e.target.value.toUpperCase())} placeholder="WEB-2026-0001" className={input + " font-mono"} />
+            </div>
+            <div>
+              <label htmlFor="tphone" className="mb-1.5 block text-[14px] font-semibold">Phone number</label>
+              <input id="tphone" type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="0772 123 456" className={input} />
+            </div>
+            {msg && <p role="status" className={"rounded-xl px-4 py-3 text-[14px] " + (msg.tone === "error" ? "bg-red-50 text-red-700" : "bg-brand-soft text-ink")}>{msg.text}</p>}
+            <button type="submit" disabled={busy} className="rounded-full bg-brand px-7 py-3.5 text-[15px] font-semibold text-white hover:bg-brand-dark disabled:opacity-60">{busy ? "Checking…" : "Track order"}</button>
+          </form>
+
+          {order && (
+            <div className="rounded-2xl border border-line p-6 sm:p-8" aria-live="polite">
+              <p className="text-[13px] font-semibold uppercase tracking-wider text-ink-soft">Order {order.reference}</p>
+              {order.status === "cancelled" ? (
+                <p className="mt-3 rounded-xl bg-red-50 px-4 py-3 text-[15px] text-red-700">This order was cancelled{when("cancelled") && " on " + when("cancelled")}. Contact us if that's unexpected.</p>
+              ) : (
+                <ol className="mt-5 space-y-0">
+                  {STATUS_STEPS.map((step, i) => {
+                    const done = i <= reached;
+                    const label = step.status === "delivered" && order.delivery === "pickup" ? "Collected" : step.label;
+                    return (
+                      <li key={step.status} className="relative flex gap-4 pb-6 last:pb-0">
+                        {i < STATUS_STEPS.length - 1 && <span className={"absolute left-[13px] top-7 h-[calc(100%-1.25rem)] w-0.5 " + (i < reached ? "bg-brand" : "bg-line")} />}
+                        <span className={"relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full " + (done ? "bg-brand text-white" : "border-2 border-line bg-white text-ink-soft")}>
+                          {done ? <CheckCircle2 className="h-4 w-4" /> : <span className="text-[12px] font-bold">{i + 1}</span>}
+                        </span>
+                        <div>
+                          <p className={"font-semibold " + (done ? "text-ink" : "text-ink-soft")}>{label}{done && when(step.status) && <span className="ml-2 text-[13px] font-normal text-ink-soft">{when(step.status)}</span>}</p>
+                          {i === reached && <p className="text-[14px] text-ink-soft">{step.text}</p>}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ol>
+              )}
+              <ul className="mt-6 space-y-1.5 border-t border-line pt-4 text-[14.5px]">
+                {order.items.map(i => <li key={i.name} className="flex justify-between gap-4"><span>{i.name}</span><span className="shrink-0 text-ink-soft">× {i.quantity}</span></li>)}
+              </ul>
+            </div>
+          )}
+        </div>
         <div className="rounded-2xl bg-paper p-6 sm:p-8">
           <h2 className="text-[19px] font-bold">What the statuses mean</h2>
           <dl className="mt-4 space-y-3 text-[14.5px]">
-            {[["Received", "We have your order and will call to confirm it."], ["Confirmed", "We've agreed the items, price and delivery with you."], ["Paid", "Payment received by MoMo, bank or cash."], ["Delivered", "Your order has been delivered or collected."]].map(([t, d]) => (
-              <div key={t}><dt className="font-semibold">{t}</dt><dd className="text-ink-soft">{d}</dd></div>
+            {STATUS_STEPS.map(s => (
+              <div key={s.status}><dt className="font-semibold">{s.label}</dt><dd className="text-ink-soft">{s.text}</dd></div>
             ))}
           </dl>
           {business.whatsapp && (
-            <a href={whatsappLink(business.whatsapp, "Hello, I'd like to check my order: ")} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 font-semibold text-brand-dark hover:underline"><WhatsAppIcon className="h-4 w-4 text-[#25D366]" /> Ask on WhatsApp instead</a>
+            <a href={whatsappLink(business.whatsapp, "Hello, I'd like to check my order: " + ref)} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 font-semibold text-brand-dark hover:underline"><WhatsAppIcon className="h-4 w-4 text-[#25D366]" /> Ask on WhatsApp instead</a>
           )}
         </div>
       </section>
