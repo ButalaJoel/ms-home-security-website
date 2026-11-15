@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Clock, Mail, MapPin, MessageCircle, Newspaper, PackageSearch, Phone, Star } from "lucide-react";
+import { Clock, Mail, MapPin, Newspaper, PackageSearch, Phone, Star } from "lucide-react";
 import { EmptyState, PageHero, SectionTitle, wrap } from "../components/common/PageParts.tsx";
 import RequestForm, { CONTACT_FIELDS } from "../components/common/RequestForm.tsx";
 import { useShop } from "../context/ShopContext.tsx";
 import { isUgPhone } from "../lib/forms.ts";
 import { telLink, whatsappLink } from "../lib/format.ts";
+import WhatsAppIcon from "../components/common/WhatsAppIcon.tsx";
 
 const input = "w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] outline-none focus:border-brand focus:ring-2 focus:ring-brand/20";
 
@@ -48,7 +49,7 @@ export function TrackOrderPage() {
             ))}
           </dl>
           {business.whatsapp && (
-            <a href={whatsappLink(business.whatsapp, "Hello, I'd like to check my order: ")} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 font-semibold text-brand-dark hover:underline"><MessageCircle className="h-4 w-4" /> Ask on WhatsApp instead</a>
+            <a href={whatsappLink(business.whatsapp, "Hello, I'd like to check my order: ")} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 font-semibold text-brand-dark hover:underline"><WhatsAppIcon className="h-4 w-4 text-[#25D366]" /> Ask on WhatsApp instead</a>
           )}
         </div>
       </section>
@@ -104,9 +105,9 @@ export function FeedbackPage() {
 export function ContactPage() {
   const { business } = useShop();
   const mapQuery = encodeURIComponent(business.name + ", " + business.address);
-  const cards: { icon: typeof Phone; label: string; value: string; href?: string }[] = [
+  const cards: { icon: React.ComponentType<{ className?: string }>; label: string; value: string; href?: string }[] = [
     ...business.phones.map(p => ({ icon: Phone, label: "Call", value: p, href: telLink(p) })),
-    ...(business.whatsapp ? [{ icon: MessageCircle, label: "WhatsApp", value: "Chat with us", href: whatsappLink(business.whatsapp, "Hello MS Home Security, ") }] : []),
+    ...(business.whatsapp ? [{ icon: WhatsAppIcon, label: "WhatsApp", value: "Chat with us", href: whatsappLink(business.whatsapp, "Hello MS Home Security, ") }] : []),
     ...(business.email ? [{ icon: Mail, label: "Email", value: business.email, href: "mailto:" + business.email }] : []),
     { icon: MapPin, label: "Visit", value: business.address, href: business.mapLink || "#map" },
     ...(business.hours ? [{ icon: Clock, label: "Opening hours", value: business.hours }] : []),

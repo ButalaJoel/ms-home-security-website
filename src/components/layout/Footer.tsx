@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { CATEGORIES } from "../../config/categories.ts";
 import { SOLUTIONS } from "../../config/navigation.ts";
 import { useShop } from "../../context/ShopContext.tsx";
 import { telLink, whatsappLink } from "../../lib/format.ts";
+import WhatsAppIcon from "../common/WhatsAppIcon.tsx";
 
 const heading = "mb-4 text-[14px] font-semibold text-white";
 const list = "space-y-2.5 text-[13.5px]";
@@ -53,7 +54,7 @@ export default function Footer() {
               <li key={p}><a href={telLink(p)} className={link + " inline-flex items-center gap-2"}><Phone className="h-4 w-4 text-brand" />{p}</a></li>
             ))}
             {business.whatsapp && (
-              <li><a href={whatsappLink(business.whatsapp, "Hello MS Home Security, ")} target="_blank" rel="noopener noreferrer" className={link + " inline-flex items-center gap-2"}><MessageCircle className="h-4 w-4 text-brand" />WhatsApp</a></li>
+              <li><a href={whatsappLink(business.whatsapp, "Hello MS Home Security, ")} target="_blank" rel="noopener noreferrer" className={link + " inline-flex items-center gap-2"}><WhatsAppIcon className="h-4 w-4 text-[#25D366]" />WhatsApp</a></li>
             )}
             {business.email && <li><a href={"mailto:" + business.email} className={link + " inline-flex items-center gap-2 break-all"}><Mail className="h-4 w-4 shrink-0 text-brand" />{business.email}</a></li>}
             <li className="flex items-start gap-2 text-white/60"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />{business.address}</li>

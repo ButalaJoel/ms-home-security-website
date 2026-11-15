@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { BadgeCheck, ChevronRight, MessageCircle, Minus, Plus, ShoppingCart, Truck, Wrench } from "lucide-react";
+import { BadgeCheck, ChevronRight, Minus, Plus, ShoppingCart, Truck, Wrench } from "lucide-react";
 import { useShop } from "../context/ShopContext.tsx";
 import { useCart } from "../context/CartContext.tsx";
 import { categoryByName } from "../config/categories.ts";
 import { formatUGX, whatsappLink } from "../lib/format.ts";
 import { ProductCard, ProductImage, StockBadge } from "../components/product/ProductBits.tsx";
 import { NotFoundPage } from "./ComingNextPage.tsx";
+import WhatsAppIcon from "../components/common/WhatsAppIcon.tsx";
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -50,13 +51,13 @@ export default function ProductPage() {
 
       <section className="mx-auto grid max-w-[1320px] gap-8 px-5 py-8 lg:grid-cols-2 lg:gap-14 lg:px-8">
         <div>
-          <div className="aspect-square overflow-hidden rounded-2xl bg-paper">
+          <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-white">
             <ProductImage src={photos[photo] ?? ""} category={product.category} name={product.name} className="p-8" />
           </div>
           {photos.length > 1 && (
             <div className="mt-3 flex gap-2 overflow-x-auto no-scrollbar">
               {photos.map((src, i) => (
-                <button key={src} type="button" onClick={() => setPhoto(i)} aria-label={"Photo " + (i + 1)} className={"h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 bg-paper " + (i === photo ? "border-brand" : "border-transparent")}>
+                <button key={src} type="button" onClick={() => setPhoto(i)} aria-label={"Photo " + (i + 1)} className={"h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 bg-white " + (i === photo ? "border-brand" : "border-line")}>
                   <img src={src} alt="" className="h-full w-full object-contain p-1.5" />
                 </button>
               ))}
@@ -92,7 +93,7 @@ export default function ProductPage() {
             </button>
             {business.whatsapp && (
               <a href={whatsappLink(business.whatsapp, waText)} target="_blank" rel="noopener noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-line px-6 text-[15px] font-semibold transition hover:border-[#1fa855] hover:text-[#1fa855]">
-                <MessageCircle className="h-5 w-5" /> Order on WhatsApp
+                <WhatsAppIcon className="h-5 w-5 text-[#25D366]" /> Order on WhatsApp
               </a>
             )}
           </div>

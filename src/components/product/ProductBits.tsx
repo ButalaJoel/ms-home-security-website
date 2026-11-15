@@ -5,12 +5,16 @@ import { formatUGX, STOCK_LABEL } from "../../lib/format.ts";
 import type { PublicProduct, StockStatus } from "../../lib/types.ts";
 import { useCart } from "../../context/CartContext.tsx";
 
-/** Product photo from the POS (Cloudinary), or the category icon on a soft panel when there is none yet. */
+/**
+ * Product photo from the POS (Cloudinary), or the category icon on a soft panel when there is none yet.
+ * It fills its parent exactly (absolute inset-0), so the parent must be `relative` with a set size;
+ * large photos then scale down inside the box instead of spilling out of it.
+ */
 export function ProductImage({ src, category, name, className = "" }: { src: string; category: string; name: string; className?: string }) {
   const Icon = categoryByName(category)?.icon;
-  if (src) return <img src={src} alt={name} loading="lazy" className={"h-full w-full object-contain " + className} />;
+  if (src) return <img src={src} alt={name} loading="lazy" className={"absolute inset-0 h-full w-full object-contain " + className} />;
   return (
-    <div className={"flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-soft to-white " + className} aria-hidden="true">
+    <div className={"absolute inset-0 flex items-center justify-center bg-gradient-to-br from-brand-soft to-white " + className} aria-hidden="true">
       {Icon && <Icon className="h-1/3 w-1/3 text-brand/70" strokeWidth={1.25} />}
     </div>
   );
@@ -36,9 +40,9 @@ export function ProductCard({ product }: { product: PublicProduct }) {
   const href = "/product/" + product.id;
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(11,38,59,0.10)]">
-      <Link to={href} className="relative block aspect-[4/3] bg-paper">
-        <ProductImage src={product.imageUrl} category={product.category} name={product.name} className="p-4" />
-        <span className="absolute left-2 top-2 sm:left-3 sm:top-3"><StockBadge stock={product.stock} /></span>
+      <Link to={href} className="relative block aspect-[4/3] overflow-hidden border-b border-line bg-white">
+        <ProductImage src={product.imageUrl} category={product.category} name={product.name} className="px-5 pb-3 pt-10 transition duration-300 group-hover:scale-[1.03]" />
+        <span className="absolute left-2 top-2 z-10 sm:left-3 sm:top-3"><StockBadge stock={product.stock} /></span>
       </Link>
       <div className="flex flex-1 flex-col gap-1.5 p-3 sm:p-4">
         <p className="text-[11.5px] font-semibold uppercase tracking-wider text-brand-dark">{product.brand || categoryByName(product.category)?.short}</p>

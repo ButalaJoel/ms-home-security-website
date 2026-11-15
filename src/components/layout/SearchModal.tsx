@@ -73,7 +73,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
           ) : (
             results.map(p => (
               <button key={p.id} type="button" onClick={() => go("/product/" + p.id)} className="flex w-full items-center gap-3 rounded-xl p-2.5 text-left hover:bg-paper">
-                <span className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-paper"><ProductImage src={p.imageUrl} category={p.category} name={p.name} className="p-1" /></span>
+                <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-paper"><ProductImage src={p.imageUrl} category={p.category} name={p.name} className="p-1" /></span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[14.5px] font-semibold text-ink">{p.name}</span>
                   <span className="block text-[12.5px] text-ink-soft">{p.category}</span>

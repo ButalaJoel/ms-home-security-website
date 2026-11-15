@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { CheckCircle2, MessageCircle, Send, Star } from "lucide-react";
+import { CheckCircle2, Send, Star } from "lucide-react";
 import { useShop } from "../../context/ShopContext.tsx";
 import { isUgPhone, submitRequest, type RequestKind } from "../../lib/forms.ts";
+import WhatsAppIcon from "./WhatsAppIcon.tsx";
 
 export interface Field {
   name: string;
@@ -62,7 +63,7 @@ export default function RequestForm({ kind, fields, submitLabel = "Send", initia
   if (state.status === "whatsapp") {
     return (
       <div className="rounded-2xl bg-paper p-8 text-center" role="status">
-        <MessageCircle className="mx-auto h-10 w-10 text-[#1fa855]" />
+        <WhatsAppIcon className="mx-auto h-10 w-10 text-[#25D366]" />
         <h3 className="mt-3 text-[20px] font-bold">Almost done: press send in WhatsApp</h3>
         <p className="mt-1.5 text-ink-soft">We've written your details into a WhatsApp message to our team.</p>
         <a href={state.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#1fa855] px-6 py-3 font-semibold text-white">Open WhatsApp again</a>
