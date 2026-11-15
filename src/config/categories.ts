@@ -1,16 +1,16 @@
 import {
-  Cctv, Siren, Eye, Fingerprint, LockKeyhole, ScanLine, Radio, TrafficCone,
+  Cctv, Siren, Eye, Fingerprint, LockKeyhole, ScanLine, Radio, TrafficCone, FireExtinguisher,
   type LucideIcon,
 } from "lucide-react";
 
-// The 8 product categories, named exactly as in the POS.
+// The 9 product categories, named exactly as in the POS (a product shows only if its POS category matches one of these names).
 export interface Category {
   name: string;
   slug: string;
   short: string;
   blurb: string;
   icon: LucideIcon;
-  group: "Surveillance" | "Access & Entry" | "Communication & Traffic";
+  group: "Surveillance" | "Access & Entry" | "Communication & Traffic" | "Safety";
 }
 
 export const CATEGORIES: Category[] = [
@@ -22,6 +22,7 @@ export const CATEGORIES: Category[] = [
   { name: "Metal Detectors", slug: "metal-detectors", short: "Metal detectors", blurb: "Handheld wands and walk-through gates for entrances and events.", icon: ScanLine, group: "Access & Entry" },
   { name: "Walkie-Talkies & Radios", slug: "walkie-talkies", short: "Walkie-talkies", blurb: "Motorola and Baofeng radios for guards, sites and events.", icon: Radio, group: "Communication & Traffic" },
   { name: "Parking, Traffic & Queue Systems", slug: "parking-traffic", short: "Parking & queues", blurb: "Boom barriers, turnstiles, parking and queue management.", icon: TrafficCone, group: "Communication & Traffic" },
+  { name: "Safety & Guard Equipment", slug: "safety-guard", short: "Safety & guard", blurb: "Fire extinguishers, batons and everyday gear for guards and premises.", icon: FireExtinguisher, group: "Safety" },
 ];
 
 export const categoryBySlug = (slug: string) => CATEGORIES.find(c => c.slug === slug);

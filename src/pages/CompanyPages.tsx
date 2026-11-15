@@ -33,7 +33,7 @@ export function AboutPage() {
       <section className="bg-paper py-16">
         <div className={wrap}>
           <SectionTitle kicker="What we do" title="Our product ranges" />
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
             {CATEGORIES.map(({ slug, name, icon: Icon }) => (
               <Link key={slug} to={"/products/" + slug} className="group flex items-center gap-3 rounded-2xl bg-white p-4 transition hover:shadow-[0_10px_30px_rgba(11,38,59,0.08)] sm:p-5">
                 <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-dark"><Icon className="h-5 w-5" /></span>
