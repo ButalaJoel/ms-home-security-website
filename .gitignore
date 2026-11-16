@@ -4,3 +4,6 @@ dist
 .env.local
 *.log
 *.tsbuildinfo
+
+# Product photos are uploaded to the POS, not part of the site
+photos/
