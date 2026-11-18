@@ -50,13 +50,29 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* What we do */}
+      {/* Why choose us */}
       <section className="bg-paper py-16">
+        <div className={wrap}>
+          <SectionTitle kicker="Why choose us" title={"Why choose " + business.name} />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {why.map(({ icon: Icon, title, text }) => (
+              <div key={title} className="rounded-2xl bg-white p-6">
+                <Icon className="h-7 w-7 text-brand" />
+                <h3 className="mt-4 text-[17px] font-bold">{title}</h3>
+                <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-soft">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What we do */}
+      <section className="py-16">
         <div className={wrap}>
           <SectionTitle kicker="What we do" title="Security systems we supply and install" />
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
             {SERVICES.map(({ icon: Icon, name, to }) => (
-              <Link key={name} to={to} className="group flex items-center gap-3 rounded-2xl bg-white p-4 transition hover:shadow-[0_10px_30px_rgba(11,38,59,0.08)] sm:p-5">
+              <Link key={name} to={to} className="group flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-line transition hover:shadow-[0_10px_30px_rgba(11,38,59,0.08)] sm:p-5">
                 <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-dark"><Icon className="h-5 w-5" /></span>
                 <span className="text-[14.5px] font-semibold leading-snug">{name}</span>
               </Link>
@@ -84,22 +100,6 @@ export function AboutPage() {
           <ul className="mt-4 flex flex-wrap gap-2.5">
             {CORE_VALUES.map(v => <li key={v} className="rounded-full bg-white px-4 py-2 text-[14.5px] font-semibold ring-1 ring-line">{v}</li>)}
           </ul>
-        </div>
-      </section>
-
-      {/* Why choose us */}
-      <section className="bg-paper py-16">
-        <div className={wrap}>
-          <SectionTitle kicker="Why choose us" title={"Why choose " + business.name} />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {why.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="rounded-2xl bg-white p-6">
-                <Icon className="h-7 w-7 text-brand" />
-                <h3 className="mt-4 text-[17px] font-bold">{title}</h3>
-                <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-soft">{text}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
