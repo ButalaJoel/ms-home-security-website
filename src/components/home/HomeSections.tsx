@@ -122,7 +122,7 @@ export function WhyUs() {
   return (
     <section className="bg-black py-16 text-white sm:py-24">
       <div className={wrap}>
-        <SectionTitle title="Why MS Home Security" link={{ label: "About us", to: "/about" }} dark />
+        <SectionTitle title="Why MS Security Systems" link={{ label: "About us", to: "/about" }} dark />
         <div className="grid gap-8 lg:grid-cols-[320px_1fr] lg:gap-14">
           <ul className="flex gap-2 overflow-x-auto no-scrollbar lg:flex-col lg:gap-0">
             {reasons.map((x, k) => (
@@ -223,7 +223,7 @@ export function DistributorBanner() {
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/15 blur-[100px]" />
       <div className="relative mx-auto max-w-2xl px-5 py-16 text-center sm:py-20">
         <h2 className="text-[28px] font-bold sm:text-[36px]">Become a distributor</h2>
-        <p className="mt-3 text-[16px] leading-relaxed text-white/70">Sell and install MS Home Security products in your town. Get trade prices, stock support and training from our team.</p>
+        <p className="mt-3 text-[16px] leading-relaxed text-white/70">Sell and install MS Security Systems products in your town. Get trade prices, stock support and training from our team.</p>
         <Link to="/become-a-distributor" className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-brand-dark">
           Apply now <ArrowRight className="h-4 w-4" />
         </Link>

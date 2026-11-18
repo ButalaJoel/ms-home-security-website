@@ -54,7 +54,7 @@ export default function Footer() {
               <li key={p}><a href={telLink(p)} className={link + " inline-flex items-center gap-2"}><Phone className="h-4 w-4 text-brand" />{p}</a></li>
             ))}
             {business.whatsapp && (
-              <li><a href={whatsappLink(business.whatsapp, "Hello MS Home Security, ")} target="_blank" rel="noopener noreferrer" className={link + " inline-flex items-center gap-2"}><WhatsAppIcon className="h-4 w-4 text-[#25D366]" />WhatsApp</a></li>
+              <li><a href={whatsappLink(business.whatsapp, "Hello MS Security Systems, ")} target="_blank" rel="noopener noreferrer" className={link + " inline-flex items-center gap-2"}><WhatsAppIcon className="h-4 w-4 text-[#25D366]" />WhatsApp</a></li>
             )}
             {business.email && <li><a href={"mailto:" + business.email} className={link + " inline-flex items-center gap-2 break-all"}><Mail className="h-4 w-4 shrink-0 text-brand" />{business.email}</a></li>}
             <li className="flex items-start gap-2 text-white/60"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />{business.address}</li>
@@ -65,7 +65,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-4 px-5 py-6 text-[12.5px] text-white/45 lg:px-8">
           <div className="flex items-center gap-4">
-            <span className="rounded-md bg-white px-2 py-1.5"><img src="/logo.png" alt="MS Home Security Solutions" className="h-7 w-auto" loading="lazy" /></span>
+            <span className="rounded-md bg-white px-2 py-1.5"><img src="/logo.png" alt="MS Security Systems Ltd" className="h-7 w-auto" loading="lazy" /></span>
             <p>© {new Date().getFullYear()} {business.name}. All rights reserved.</p>
           </div>
           <p>Prices in Uganda Shillings · Delivery and installation across Uganda</p>

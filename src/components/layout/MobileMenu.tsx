@@ -22,7 +22,7 @@ export default function MobileMenu({ open, onClose }: { open: boolean; onClose: 
       <div className="anim-fade absolute inset-0 bg-ink/50" onClick={onClose} />
       <div className="anim-slide absolute inset-y-0 right-0 flex w-[88vw] max-w-sm flex-col overflow-y-auto bg-white">
         <div className="flex items-center justify-between border-b border-line px-5 py-3">
-          <img src="/logo.png" alt="MS Home Security Solutions" className="h-10 w-auto" />
+          <img src="/logo.png" alt="MS Security Systems Ltd" className="h-10 w-auto" />
           <button type="button" onClick={onClose} aria-label="Close menu" className="inline-flex h-11 w-11 items-center justify-center rounded-full hover:bg-paper"><X className="h-6 w-6" /></button>
         </div>
         <nav className="flex-1 px-5" aria-label="Main">

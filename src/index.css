@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Brand colours sampled from the MS Home Security logo, same as the POS. */
+/* Brand colours sampled from the MS Security Systems logo, same as the POS. */
 @theme {
   --color-brand: #00a9e8;
   --color-brand-dark: #0088bd;
@@ -35,10 +35,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.015em; }
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
-/* Camera "live view" tiles in the slider */
-.scanline { background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px); }
-@keyframes blink { 50% { opacity: 0.25; } }
-.rec-dot { animation: blink 1.4s steps(1) infinite; }
+/* Hero slider: the active dot fills up while the slide is showing */
+@keyframes hero-progress { from { width: 0; } to { width: 100%; } }
+.hero-progress { animation: hero-progress linear forwards; }
 
 /* Loading placeholders: a soft light sweep over the grey shape */
 @keyframes shimmer { from { background-position: 150% 0; } to { background-position: -50% 0; } }

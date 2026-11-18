@@ -4,7 +4,7 @@ import type { BusinessDetails } from "../lib/types.ts";
 // so customers always see a way to call or WhatsApp the shop.
 // The live values come from POS Settings (GET /api/public/business); change them there.
 export const FALLBACK_BUSINESS: BusinessDetails = {
-  name: "MS Home Security Solutions",
+  name: "MS Security Systems Ltd",
   phones: ["+256 759 985 611", "+256 792 977 212", "+256 740 853 303"],
   whatsapp: "256759985611",
   email: "msh0mesecuritysolutionsug01@gmail.com",

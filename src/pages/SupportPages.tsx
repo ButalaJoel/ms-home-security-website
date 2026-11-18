@@ -155,7 +155,7 @@ export function ContactPage() {
   const mapQuery = encodeURIComponent(business.name + ", " + business.address);
   const cards: { icon: React.ComponentType<{ className?: string }>; label: string; value: string; href?: string }[] = [
     ...business.phones.map(p => ({ icon: Phone, label: "Call", value: p, href: telLink(p) })),
-    ...(business.whatsapp ? [{ icon: WhatsAppIcon, label: "WhatsApp", value: "Chat with us", href: whatsappLink(business.whatsapp, "Hello MS Home Security, ") }] : []),
+    ...(business.whatsapp ? [{ icon: WhatsAppIcon, label: "WhatsApp", value: "Chat with us", href: whatsappLink(business.whatsapp, "Hello MS Security Systems, ") }] : []),
     ...(business.email ? [{ icon: Mail, label: "Email", value: business.email, href: "mailto:" + business.email }] : []),
     { icon: MapPin, label: "Visit", value: business.address, href: business.mapLink || "#map" },
     ...(business.hours ? [{ icon: Clock, label: "Opening hours", value: business.hours }] : []),
@@ -184,7 +184,7 @@ export function ContactPage() {
             ]} />
           </div>
           <div id="map" className="min-h-[360px] scroll-mt-24 overflow-hidden rounded-2xl bg-white">
-            <iframe title="Map to MS Home Security" src={"https://www.google.com/maps?q=" + mapQuery + "&output=embed"} className="h-full min-h-[360px] w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+            <iframe title="Map to MS Security Systems" src={"https://www.google.com/maps?q=" + mapQuery + "&output=embed"} className="h-full min-h-[360px] w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
           </div>
         </div>
       </section>

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 // Page title, description and share-preview tags for each page.
 // index.html has the defaults for the home page and for crawlers that don't run JavaScript.
-export const SITE_NAME = "MS Home Security Solutions";
+export const SITE_NAME = "MS Security Systems Ltd";
 const DEFAULT_DESCRIPTION =
   "CCTV cameras, access control, smart locks, metal detectors, walkie-talkies, alarms and parking systems in Kampala, with installation anywhere in Uganda.";
 

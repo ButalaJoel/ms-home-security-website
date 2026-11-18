@@ -158,7 +158,7 @@ const DISTRIBUTOR_POINTS = [
 export function DistributorPage() {
   return (
     <>
-      <PageHero crumbs={[{ label: "Become a distributor" }]} title="Become a distributor" intro="Sell and install MS Home Security products in your town, with our support.">
+      <PageHero crumbs={[{ label: "Become a distributor" }]} title="Become a distributor" intro="Sell and install MS Security Systems products in your town, with our support.">
         <HeroButton to="#apply">Apply now</HeroButton>
       </PageHero>
       <section className={wrap + " py-16"}>

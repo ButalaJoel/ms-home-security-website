@@ -37,8 +37,8 @@ export default function Header({ onSearch, onMenu }: Props) {
   return (
     <header className={"sticky top-0 z-40 bg-white transition-shadow " + (scrolled || active !== null ? "shadow-[0_1px_0_var(--color-line),0_6px_20px_rgba(11,38,59,0.06)]" : "shadow-[0_1px_0_var(--color-line)]")} onMouseLeave={closeSoon}>
       <div className="mx-auto flex h-[68px] max-w-[1320px] items-center gap-6 px-5 lg:px-8">
-        <Link to="/" className="shrink-0" aria-label="MS Home Security Solutions, home">
-          <img src="/logo.png" alt="MS Home Security Solutions" width={96} height={48} className="h-11 w-auto lg:h-12" />
+        <Link to="/" className="shrink-0" aria-label="MS Security Systems Ltd, home">
+          <img src="/logo.png" alt="MS Security Systems Ltd" width={112} height={56} className="h-12 w-auto lg:h-14" />
         </Link>
 
         <nav className="hidden h-full flex-1 items-stretch justify-center gap-1 lg:flex" aria-label="Main">
