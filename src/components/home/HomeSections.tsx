@@ -25,9 +25,34 @@ export function SectionTitle({ title, link, dark = false }: { title: string; lin
   );
 }
 
-// Tall rounded cards with the title on the picture, scrolling sideways (hikvision.com's product spotlight row).
-// Until there are real photos, each card shows the category's icon on a tinted night background.
-const TINTS = ["#0b4a6f", "#3a2d6e", "#0f5a57", "#123a6b", "#4a3b12", "#16405a", "#2c3f62", "#5a2a2a"];
+// Tall rounded cards scrolling sideways (hikvision.com's product spotlight row).
+// Each card shows a real product from that category: a featured one if there is one,
+// otherwise the first product with a photo. Before the catalogue loads (or if a category
+// has no photos yet) it uses one of our own published photos, then the category icon.
+const FALLBACK_PHOTO: Record<string, string> = {
+  "alarms-sensors": "/product-photos/beam-sensor.jpg",
+  "convex-mirrors": "/product-photos/convex-mirror-60cm.jpg",
+  "access-control": "/product-photos/zkteco-uface-800.jpg",
+  "smart-locks": "/product-photos/aluminium-door-lock.jpg",
+  "walkie-talkies": "/product-photos/motorola-gp340.jpg",
+  "parking-traffic": "/product-photos/traffic-lights.jpg",
+  "safety-guard": "/product-photos/hillmark-6kg.jpg",
+};
+
+function CategoryPhoto({ src, icon: Icon, name }: { src: string; icon: LucideIcon; name: string }) {
+  const [failed, setFailed] = useState(false);
+  if (!src || failed) return <Icon className="h-[46%] w-[46%] text-ink/25" strokeWidth={0.9} />;
+  return (
+    <img
+      src={src}
+      alt={name}
+      loading="lazy"
+      decoding="async"
+      onError={() => setFailed(true)}
+      className="h-full w-full object-contain mix-blend-multiply transition duration-500 group-hover:scale-105"
+    />
+  );
+}
 
 export function SpotlightRow() {
   const row = useRef<HTMLDivElement>(null);
@@ -43,22 +68,25 @@ export function SpotlightRow() {
         </div>
       </div>
       <div ref={row} className="no-scrollbar mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-5 px-5 pb-2 lg:scroll-px-8 lg:px-[max(2rem,calc((100vw-1320px)/2+2rem))]">
-        {CATEGORIES.map(({ slug, name, blurb, icon: Icon }, i) => {
-          const n = products.filter(p => p.category === name).length;
+        {CATEGORIES.map(({ slug, name, blurb, icon }) => {
+          const inCategory = products.filter(p => p.category === name);
+          const withPhoto = inCategory.filter(p => p.imageUrl);
+          const pick = withPhoto.find(p => p.featured) ?? withPhoto[0];
+          const photo = pick?.imageUrl || FALLBACK_PHOTO[slug] || "";
           return (
             <Link
               key={slug}
               to={"/products/" + slug}
-              className="group relative aspect-[3/4] w-[72vw] max-w-[300px] shrink-0 snap-start overflow-hidden rounded-2xl text-white sm:w-[300px]"
-              style={{ background: `radial-gradient(120% 90% at 70% 20%, ${TINTS[i % TINTS.length]} 0%, #05121d 70%)` }}
+              className="group flex aspect-[3/4] w-[72vw] max-w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-[#f2f4f7] ring-1 ring-line transition hover:shadow-[0_18px_40px_rgba(11,38,59,0.12)] sm:w-[300px]"
             >
-              <div className="dot-grid absolute inset-0 opacity-70" />
-              <Icon className="absolute left-1/2 top-[38%] h-[42%] w-[42%] -translate-x-1/2 -translate-y-1/2 text-white/85 transition duration-500 group-hover:scale-110" strokeWidth={0.9} />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-6 pt-16">
-                <h3 className="text-[21px] font-bold leading-tight">{name}</h3>
-                <p className="mt-1.5 text-[13.5px] leading-relaxed text-white/75">{blurb}</p>
-                <span className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-brand">
-                  {n > 0 ? n + " products" : "View range"} <ArrowRight className="h-3.5 w-3.5 transition-all group-hover:translate-x-1" />
+              <div className="flex min-h-0 flex-1 items-center justify-center p-7">
+                <CategoryPhoto src={photo} icon={icon} name={pick?.name ?? name} />
+              </div>
+              <div className="bg-white px-6 pb-6 pt-5">
+                <h3 className="text-[19px] font-bold leading-tight text-ink">{name}</h3>
+                <p className="mt-1.5 line-clamp-2 text-[13.5px] leading-relaxed text-ink-soft">{blurb}</p>
+                <span className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-brand-dark">
+                  {inCategory.length > 0 ? inCategory.length + " products" : "View range"} <ArrowRight className="h-3.5 w-3.5 transition-all group-hover:translate-x-1" />
                 </span>
               </div>
             </Link>
