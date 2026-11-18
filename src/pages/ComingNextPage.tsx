@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { Construction } from "lucide-react";
+import { usePageMeta } from "../lib/seo.ts";
 
 // Holds the place of pages from the feature map that are not built yet, so every menu link works.
 export default function ComingNextPage({ title }: { title: string }) {
+  usePageMeta({ title, noindex: true });
   return (
     <section className="mx-auto max-w-xl px-6 py-24 text-center">
       <Construction className="mx-auto h-10 w-10 text-brand" />
@@ -14,6 +16,7 @@ export default function ComingNextPage({ title }: { title: string }) {
 }
 
 export function NotFoundPage() {
+  usePageMeta({ title: "Page not found", noindex: true });
   return (
     <section className="mx-auto max-w-xl px-6 py-24 text-center">
       <p className="font-display text-6xl font-extrabold text-brand">404</p>

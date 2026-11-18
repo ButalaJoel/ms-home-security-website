@@ -1,10 +1,10 @@
-import { API_URL, usingSampleData } from "./api.ts";
+import { API_URL } from "./api.ts";
 import { whatsappLink } from "./format.ts";
 import type { CartItem } from "./types.ts";
 
 // Website orders (Payment A): the customer sends the order, staff call to confirm
 // price and delivery, then the customer pays by Mobile Money or on delivery.
-// Live: POST to the POS. Preview (no POS): the order opens in WhatsApp instead.
+// POST to the POS. If the POS is an older version without orders (404), it opens in WhatsApp instead.
 
 export interface OrderDetails {
   name: string;
@@ -68,7 +68,6 @@ function orderText(details: OrderDetails, items: CartItem[]): string {
 }
 
 export async function placeOrder(details: OrderDetails, items: CartItem[], whatsapp: string, honeypot: string): Promise<PlaceResult> {
-  if (usingSampleData) return { ok: true, mode: "whatsapp", url: whatsappLink(whatsapp, orderText(details, items)) };
   try {
     const res = await fetch(API_URL + "/api/public/orders", {
       method: "POST",
@@ -94,7 +93,6 @@ export async function placeOrder(details: OrderDetails, items: CartItem[], whats
 export type TrackResult = { ok: true; order: TrackedOrder } | { ok: false; error: string; notLive?: boolean };
 
 export async function trackOrder(reference: string, phone: string): Promise<TrackResult> {
-  if (usingSampleData) return { ok: false, notLive: true, error: "Online tracking starts when the website is connected to our shop system." };
   try {
     const query = new URLSearchParams({ reference: reference.trim().toUpperCase(), phone: phone.trim() });
     const res = await fetch(API_URL + "/api/public/orders/track?" + query.toString(), { headers: { Accept: "application/json" } });

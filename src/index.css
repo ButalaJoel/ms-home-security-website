@@ -40,6 +40,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.015em; }
 @keyframes blink { 50% { opacity: 0.25; } }
 .rec-dot { animation: blink 1.4s steps(1) infinite; }
 
+/* Loading placeholders: a soft light sweep over the grey shape */
+@keyframes shimmer { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+.shimmer { background: linear-gradient(90deg, #eef1f4 30%, #f8fafb 50%, #eef1f4 70%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; }
+
 /* Fine dotted grid used on dark panels and cards */
 .dot-grid { background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px); background-size: 18px 18px; }
 

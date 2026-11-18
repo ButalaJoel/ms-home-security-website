@@ -1,9 +1,9 @@
-import { API_URL, usingSampleData } from "./api.ts";
+import { API_URL } from "./api.ts";
 import { whatsappLink } from "./format.ts";
 
 // Every website form (installation, business quote, distributor, contact, feedback) goes through here.
 // Live: POST to the POS server, which saves it in the POS "Website inbox".
-// Preview (no POS address yet): the same details open in WhatsApp, so nothing is lost.
+// If the POS has no Website inbox yet (404), the same details open in WhatsApp, so nothing is lost.
 
 export type RequestKind = "installation" | "business" | "distributor" | "contact" | "feedback";
 
@@ -23,7 +23,6 @@ export async function submitRequest(kind: RequestKind, fields: Record<string, st
     const lines = Object.entries(fields).filter(([, v]) => v.trim()).map(([k, v]) => `${labels[k] ?? k}: ${v.trim()}`);
     return { ok: true, mode: "whatsapp", url: whatsappLink(whatsapp, `${KIND_LABEL[kind]}\n\n${lines.join("\n")}`) };
   };
-  if (usingSampleData) return viaWhatsApp();
   try {
     const res = await fetch(API_URL + "/api/public/requests", {
       method: "POST",

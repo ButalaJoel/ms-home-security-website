@@ -58,7 +58,7 @@ export function CheckoutPage() {
   if (state.status === "whatsapp") {
     return (
       <>
-        <PageHero crumbs={[{ label: "Cart" }, { label: "Checkout" }]} title="Almost done" />
+        <PageHero noindex crumbs={[{ label: "Cart" }, { label: "Checkout" }]} title="Almost done" />
         <section className={wrap + " py-16"}>
           <div className="mx-auto max-w-lg rounded-2xl bg-paper p-8 text-center" role="status">
             <WhatsAppIcon className="mx-auto h-10 w-10 text-[#25D366]" />
@@ -74,7 +74,7 @@ export function CheckoutPage() {
   if (items.length === 0) {
     return (
       <>
-        <PageHero crumbs={[{ label: "Checkout" }]} title="Checkout" />
+        <PageHero noindex crumbs={[{ label: "Checkout" }]} title="Checkout" />
         <section className={wrap + " py-16"}>
           <EmptyState icon={ShoppingCart} title="Your cart is empty" text="Add the products you need, then come back here to send your order." action={{ label: "Shop products", to: "/products" }} />
         </section>
@@ -87,7 +87,7 @@ export function CheckoutPage() {
 
   return (
     <>
-      <PageHero crumbs={[{ label: "Cart" }, { label: "Checkout" }]} title="Send your order" intro="No payment now. We call you to confirm the price and delivery, then you pay by Mobile Money or on delivery." />
+      <PageHero crumbs={[{ label: "Cart" }, { label: "Checkout" }]} noindex title="Send your order" intro="No payment now. We call you to confirm the price and delivery, then you pay by Mobile Money or on delivery." />
       <section className={wrap + " grid items-start gap-8 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:py-16"}>
         <form onSubmit={onSubmit} noValidate className="space-y-6 rounded-2xl border border-line p-5 sm:p-8">
           <input type="text" tabIndex={-1} autoComplete="off" value={honey} onChange={e => setHoney(e.target.value)} className="hidden" aria-hidden="true" />
@@ -188,7 +188,7 @@ export function OrderReceivedPage() {
 
   return (
     <>
-      <PageHero crumbs={[{ label: "Order received" }]} title="Thank you, we've got your order" intro={order ? `We'll call ${order.name.split(" ")[0]} shortly to confirm everything.` : "We'll call you shortly to confirm everything."} />
+      <PageHero noindex crumbs={[{ label: "Order received" }]} title="Thank you, we've got your order" intro={order ? `We'll call ${order.name.split(" ")[0]} shortly to confirm everything.` : "We'll call you shortly to confirm everything."} />
       <section className={wrap + " grid items-start gap-8 py-12 lg:grid-cols-[1.1fr_0.9fr] lg:py-16"}>
         <div className="space-y-6">
           <div className="rounded-2xl border border-line p-6 sm:p-8">

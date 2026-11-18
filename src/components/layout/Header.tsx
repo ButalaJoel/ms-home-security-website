@@ -92,7 +92,7 @@ function IconButton({ label, onClick, children }: { label: string; onClick: () =
 }
 
 function MegaPanel({ menu }: { menu: NavMenu }) {
-  const { products } = useShop();
+  const { products, loading } = useShop();
   const [tabIndex, setTabIndex] = useState(0);
 
   // Products: one tab per category, filled with the live catalogue.
@@ -137,7 +137,11 @@ function MegaPanel({ menu }: { menu: NavMenu }) {
               {tab.to && <Link to={tab.to} className="ml-auto inline-flex items-center gap-1 text-[13.5px] font-semibold text-brand-dark hover:underline">View all <ChevronRight className="h-4 w-4" /></Link>}
             </div>
           )}
-          {tab.links.length === 0 ? (
+          {isProducts && loading ? (
+            <ul className="grid grid-cols-3 gap-x-8 gap-y-4" aria-label="Loading products">
+              {Array.from({ length: 9 }, (_, i) => <li key={i} className="space-y-1.5"><div className="shimmer h-3.5 w-4/5 rounded" /><div className="shimmer h-3 w-1/3 rounded" /></li>)}
+            </ul>
+          ) : tab.links.length === 0 ? (
             <p className="text-[14px] text-ink-soft">Products in this category are coming soon. <Link to="/contact" className="font-semibold text-brand-dark underline">Ask us</Link> for availability.</p>
           ) : (
             <ul className={"grid gap-x-8 " + (isProducts ? "grid-cols-3 gap-y-1" : "grid-cols-2 gap-y-2")}>

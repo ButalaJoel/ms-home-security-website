@@ -6,7 +6,6 @@ import SearchModal from "./SearchModal.tsx";
 import CartDrawer from "./CartDrawer.tsx";
 import Footer from "./Footer.tsx";
 import SideButtons from "./SideButtons.tsx";
-import { usingSampleData } from "../../lib/api.ts";
 
 export default function Layout() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -26,9 +25,6 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-clip">
-      {usingSampleData && (
-        <p className="bg-warn px-4 py-1 text-center text-[12px] font-semibold text-white">Preview: sample products and contact details, not yet connected to the POS</p>
-      )}
       <Header onSearch={() => setSearchOpen(true)} onMenu={() => setMenuOpen(true)} />
       <main className="flex-1"><Outlet /></main>
       <Footer />

@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronRight } from "lucide-react";
+import { usePageMeta } from "../../lib/seo.ts";
 
 export const wrap = "mx-auto max-w-[1320px] px-5 lg:px-8";
 
 /** Dark band at the top of inner pages: breadcrumb, title, short intro, optional buttons. */
-export function PageHero({ crumbs, title, intro, children }: { crumbs: { label: string; to?: string }[]; title: string; intro?: string; children?: React.ReactNode }) {
+export function PageHero({ crumbs, title, intro, metaTitle, noindex, children }: { crumbs: { label: string; to?: string }[]; title: string; intro?: string; metaTitle?: string; noindex?: boolean; children?: React.ReactNode }) {
+  // Every inner page gets its browser title and search description from its header.
+  usePageMeta({ title: metaTitle ?? title, description: intro, noindex });
   return (
     <section className="relative overflow-hidden bg-night text-white">
       <div className="dot-grid absolute inset-0 opacity-60" />

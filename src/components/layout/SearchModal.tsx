@@ -10,7 +10,7 @@ const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
 // Searches the POS catalogue by name, brand, category and SKU. Every word must match.
 export default function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { products } = useShop();
+  const { products, loading } = useShop();
   const [q, setQ] = useState("");
   const input = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -66,6 +66,8 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                 ))}
               </div>
             </div>
+          ) : loading ? (
+            <p className="flex items-center justify-center gap-2 px-4 py-8 text-sm text-ink-soft" role="status"><span className="h-4 w-4 animate-spin rounded-full border-2 border-brand border-t-transparent" /> Loading products…</p>
           ) : results.length === 0 ? (
             <p className="px-4 py-8 text-center text-sm text-ink-soft">
               Nothing matches “{q.trim()}”. <Link to="/contact" onClick={onClose} className="font-semibold text-brand-dark underline">Ask us</Link>, we may still supply it.

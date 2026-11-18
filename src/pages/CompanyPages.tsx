@@ -17,7 +17,7 @@ export function AboutPage() {
   const { business } = useShop();
   return (
     <>
-      <PageHero crumbs={[{ label: "About us" }]} title={"About " + business.name} intro="A Kampala security company that supplies, installs and supports security equipment for homes, businesses and organisations across Uganda.">
+      <PageHero crumbs={[{ label: "About us" }]} metaTitle="About us" title={"About " + business.name} intro="A Kampala security company that supplies, installs and supports security equipment for homes, businesses and organisations across Uganda.">
         <HeroButton to="/products">Browse products</HeroButton>
         <HeroButton to="/contact" ghost>Contact us</HeroButton>
       </PageHero>

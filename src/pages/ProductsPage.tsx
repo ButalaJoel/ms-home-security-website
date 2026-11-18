@@ -3,10 +3,12 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ChevronRight, Search, SlidersHorizontal, X } from "lucide-react";
 import { CATEGORIES, categoryBySlug } from "../config/categories.ts";
 import { useShop } from "../context/ShopContext.tsx";
-import { ProductCard } from "../components/product/ProductBits.tsx";
+import { ProductCard, ProductCardSkeleton } from "../components/product/ProductBits.tsx";
 import type { PublicProduct, StockStatus } from "../lib/types.ts";
 import { STOCK_LABEL } from "../lib/format.ts";
 import { NotFoundPage } from "./ComingNextPage.tsx";
+import { usePageMeta } from "../lib/seo.ts";
+import { SlowLoadNotice } from "../components/common/Loading.tsx";
 
 const PAGE_SIZE = 24;
 type Sort = "featured" | "price-asc" | "price-desc" | "name";
@@ -28,6 +30,11 @@ const countBy = (list: PublicProduct[], key: (p: PublicProduct) => string | unde
 export default function ProductsPage() {
   const { category: slug } = useParams();
   const category = slug ? categoryBySlug(slug) : undefined;
+  usePageMeta({
+    title: category ? category.name : slug ? "Page not found" : "All products",
+    description: category ? `${category.blurb} Delivery and installation anywhere in Uganda.` : "Shop CCTV cameras, access control, smart locks, metal detectors, walkie-talkies, alarms and parking systems from MS Home Security in Kampala.",
+    noindex: !!slug && !category,
+  });
   const { products, loading, error, reload } = useShop();
   const [params, setParams] = useSearchParams();
   const [shown, setShown] = useState(PAGE_SIZE);
@@ -144,7 +151,7 @@ export default function ProductsPage() {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-2 text-[13.5px] text-ink-soft">
-            <span>{loading ? "Loading…" : results.length + (results.length === 1 ? " product" : " products")}</span>
+            <span>{loading ? "Loading products…" : results.length + (results.length === 1 ? " product" : " products")}</span>
             {[...types, ...brands, ...stock.map(s => STOCK_LABEL[s])].map(v => (
               <span key={v} className="inline-flex items-center gap-1 rounded-full bg-paper px-3 py-1 text-ink">{v}</span>
             ))}
@@ -157,7 +164,10 @@ export default function ProductsPage() {
               <button type="button" onClick={reload} className="mt-4 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white">Try again</button>
             </div>
           ) : loading ? (
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-3">{Array.from({ length: 6 }, (_, i) => <div key={i} className="h-[330px] animate-pulse rounded-2xl bg-paper" />)}</div>
+            <>
+              <SlowLoadNotice className="mt-6" />
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-3">{Array.from({ length: 6 }, (_, i) => <ProductCardSkeleton key={i} />)}</div>
+            </>
           ) : results.length === 0 ? (
             <div className="mt-8 rounded-2xl bg-paper p-10 text-center">
               <p className="text-[16px] font-semibold">No products match.</p>

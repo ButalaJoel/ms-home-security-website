@@ -8,6 +8,8 @@ import { formatUGX, whatsappLink } from "../lib/format.ts";
 import { ProductCard, ProductImage, StockBadge } from "../components/product/ProductBits.tsx";
 import { NotFoundPage } from "./ComingNextPage.tsx";
 import WhatsAppIcon from "../components/common/WhatsAppIcon.tsx";
+import { usePageMeta } from "../lib/seo.ts";
+import { SlowLoadNotice } from "../components/common/Loading.tsx";
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -17,6 +19,12 @@ export default function ProductPage() {
   const [qty, setQty] = useState(1);
   const [photo, setPhoto] = useState(0);
   const [tab, setTab] = useState<"specs" | "overview">("specs");
+  usePageMeta({
+    title: product ? [product.name, product.model].filter(Boolean).join(" ") : loading ? undefined : "Product not found",
+    description: product ? product.description || [product.brand, product.subcategory || product.category, product.features?.join(", ")].filter(Boolean).join(". ") : undefined,
+    image: product?.imageUrl || undefined,
+    noindex: !loading && !product,
+  });
 
   const related = useMemo(() => {
     if (!product) return [];
@@ -25,7 +33,24 @@ export default function ProductPage() {
     return same.slice(0, 4);
   }, [products, product]);
 
-  if (loading) return <div className="mx-auto h-[60vh] max-w-[1320px] animate-pulse px-5 py-10 lg:px-8"><div className="h-full rounded-2xl bg-paper" /></div>;
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-[1320px] px-5 py-8 lg:px-8" aria-busy="true" aria-label="Loading product">
+        <div className="shimmer h-3 w-56 rounded" />
+        <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="shimmer aspect-square rounded-2xl" />
+          <div className="space-y-4">
+            <div className="shimmer h-3 w-24 rounded" />
+            <div className="shimmer h-8 w-4/5 rounded" />
+            <div className="shimmer h-4 w-1/3 rounded" />
+            <div className="shimmer h-24 w-full rounded-xl" />
+            <div className="flex gap-3 pt-2"><div className="shimmer h-12 w-40 rounded-full" /><div className="shimmer h-12 w-48 rounded-full" /></div>
+          </div>
+        </div>
+        <SlowLoadNotice className="mt-8" />
+      </div>
+    );
+  }
   if (!product) return <NotFoundPage />;
 
   const category = categoryByName(product.category);

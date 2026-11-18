@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import { categoryByName } from "../../config/categories.ts";
@@ -12,7 +13,23 @@ import { useCart } from "../../context/CartContext.tsx";
  */
 export function ProductImage({ src, category, name, className = "" }: { src: string; category: string; name: string; className?: string }) {
   const Icon = categoryByName(category)?.icon;
-  if (src) return <img src={src} alt={name} loading="lazy" className={"absolute inset-0 h-full w-full object-contain " + className} />;
+  const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
+  if (src && state !== "failed") {
+    return (
+      <>
+        {state === "loading" && <span className="shimmer absolute inset-0" aria-hidden="true" />}
+        <img
+          src={src}
+          alt={name}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setState("ready")}
+          onError={() => setState("failed")}
+          className={"absolute inset-0 h-full w-full object-contain transition-opacity duration-500 " + (state === "ready" ? "opacity-100 " : "opacity-0 ") + className}
+        />
+      </>
+    );
+  }
   return (
     <div className={"absolute inset-0 flex items-center justify-center bg-gradient-to-br from-brand-soft to-white " + className} aria-hidden="true">
       {Icon && <Icon className="h-1/3 w-1/3 text-brand/70" strokeWidth={1.25} />}
@@ -63,5 +80,23 @@ export function ProductCard({ product }: { product: PublicProduct }) {
         </div>
       </div>
     </article>
+  );
+}
+
+/** Grey stand-in with the same shape as a ProductCard, shown while the catalogue loads. */
+export function ProductCardSkeleton() {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-line bg-white" aria-hidden="true">
+      <div className="shimmer aspect-[4/3]" />
+      <div className="space-y-2.5 p-4">
+        <div className="shimmer h-3 w-1/4 rounded" />
+        <div className="shimmer h-4 w-4/5 rounded" />
+        <div className="shimmer h-4 w-1/2 rounded" />
+        <div className="flex items-center justify-between pt-6">
+          <div className="shimmer h-4 w-1/3 rounded" />
+          <div className="shimmer h-10 w-10 rounded-full" />
+        </div>
+      </div>
+    </div>
   );
 }

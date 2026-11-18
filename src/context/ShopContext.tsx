@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { fetchBusiness, fetchProducts } from "../lib/api.ts";
 import type { BusinessDetails, PublicProduct } from "../lib/types.ts";
-import { SAMPLE_BUSINESS } from "../data/sampleBusiness.ts";
+import { FALLBACK_BUSINESS } from "../config/business.ts";
 
 interface ShopState {
   products: PublicProduct[];
@@ -16,20 +16,16 @@ const ShopContext = createContext<ShopState | null>(null);
 // Loads the catalogue and business details once, for every page.
 export function ShopProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<PublicProduct[]>([]);
-  const [business, setBusiness] = useState<BusinessDetails>(SAMPLE_BUSINESS);
+  const [business, setBusiness] = useState<BusinessDetails>(FALLBACK_BUSINESS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([fetchProducts(), fetchBusiness()])
-      .then(([p, b]) => {
-        if (cancelled) return;
-        setProducts(p);
-        setBusiness(b);
-        setError(null);
-      })
+    fetchBusiness().then(b => { if (!cancelled) setBusiness(b); }).catch(() => undefined); // fallback details stay
+    fetchProducts()
+      .then(p => { if (!cancelled) { setProducts(p); setError(null); } })
       .catch((e: unknown) => { if (!cancelled) setError(e instanceof Error ? e.message : "Something went wrong."); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };

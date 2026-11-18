@@ -7,7 +7,8 @@ import {
 import { CATEGORIES } from "../../config/categories.ts";
 import { SOLUTIONS } from "../../config/navigation.ts";
 import { useShop } from "../../context/ShopContext.tsx";
-import { ProductCard } from "../product/ProductBits.tsx";
+import { ProductCard, ProductCardSkeleton } from "../product/ProductBits.tsx";
+import { SlowLoadNotice } from "../common/Loading.tsx";
 
 const wrap = "mx-auto max-w-[1320px] px-5 lg:px-8";
 
@@ -90,11 +91,14 @@ export function FeaturedProducts() {
             <button type="button" onClick={reload} className="mt-4 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white">Try again</button>
           </div>
         ) : (
+          <>
+          <SlowLoadNotice className="mb-5" />
           <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
             {loading
-              ? Array.from({ length: 4 }, (_, i) => <div key={i} className="h-[330px] animate-pulse rounded-2xl bg-white" />)
+              ? Array.from({ length: 4 }, (_, i) => <ProductCardSkeleton key={i} />)
               : list.map(p => <ProductCard key={p.id} product={p} />)}
           </div>
+          </>
         )}
       </div>
     </section>
