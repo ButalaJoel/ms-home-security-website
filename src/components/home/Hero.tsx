@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, BadgeCheck, ChevronLeft, ChevronRight, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, Award, Building2, ChevronLeft, ChevronRight, Wrench } from "lucide-react";
 
 // Photo slider in the style of the Peacock site's hero: words on the left, a photo of the
 // category's products in use on the right, and prev / dots / next underneath. 4 seconds each.
@@ -125,9 +125,9 @@ export default function Hero() {
 
         <div className="relative flex flex-col gap-4 border-t border-white/10 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:pr-24 lg:pl-8 lg:pr-28">
           <ul className="flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-white/75">
-            <li className="inline-flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-brand" />6-month installation warranty</li>
-            <li className="inline-flex items-center gap-2"><Truck className="h-4 w-4 text-brand" />Delivery across Uganda</li>
-            <li className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-brand" />Pay by MoMo or on delivery</li>
+            <li className="inline-flex items-center gap-2"><Wrench className="h-4 w-4 text-brand" />Installed and tested by our own experts</li>
+            <li className="inline-flex items-center gap-2"><Award className="h-4 w-4 text-brand" />Trusted brands: Hikvision, ZKTeco, Garrett</li>
+            <li className="inline-flex items-center gap-2"><Building2 className="h-4 w-4 text-brand" />Homes, offices, schools and estates across Uganda</li>
           </ul>
           <div className="flex items-center gap-2">
             <button type="button" onClick={() => go(index - 1)} aria-label="Previous slide" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 transition hover:border-white hover:bg-white/10">
