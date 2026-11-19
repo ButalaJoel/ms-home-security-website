@@ -3,29 +3,22 @@ import { Link } from "react-router-dom";
 import { ArrowRight, BadgeCheck, ChevronLeft, ChevronRight, ShieldCheck, Truck } from "lucide-react";
 
 // Photo slider in the style of the Peacock site's hero: words on the left, a photo of the
-// category's products in use on the right, and prev / dots / next underneath. One slide per
-// category, 4 seconds each. Photos are free-licence Unsplash images (images.unsplash.com is
-// allowed in the CSP in vercel.json). To use our own installation photos, put them in
-// /public/hero/ and set `photo` to e.g. "/hero/cctv.jpg".
+// category's products in use on the right, and prev / dots / next underneath. 4 seconds each.
+// Only categories with a chosen photo get a slide. Photos live in /public/hero/ (1000 px
+// squares); to add a category, drop its photo there and add a line below.
 
 interface Slide { kicker: string; title: string; text: string; to: string; cta: string; photo: string; alt: string }
 
 const SLIDES: Slide[] = [
-  { kicker: "CCTV cameras", title: "Watch every floor, from your phone.", text: "Hikvision cameras for homes, shops and storeyed buildings, with recording and phone viewing set up before we leave.", to: "/products/cctv-cameras", cta: "Shop CCTV cameras", photo: "photo-1767059439535-10d3f5e6ad35", alt: "Security camera on a pole in front of an office building" },
-  { kicker: "Access control & attendance", title: "Only the right people get in.", text: "Fingerprint, card and face terminals for doors and staff time, with reports your HR can use.", to: "/products/access-control", cta: "Access control", photo: "photo-1776329255945-15212b50cd7f", alt: "Hikvision face recognition terminal mounted at a door" },
-  { kicker: "Smart locks", title: "No more lost keys.", text: "Keyless locks for homes, hotels and aluminium doors. Open with a fingerprint, a code, a card or your phone.", to: "/products/smart-locks", cta: "Smart locks", photo: "photo-1592933517664-ef7151097c5f", alt: "Keypad lock fitted on a door" },
-  { kicker: "Metal detectors", title: "Screen every entrance.", text: "Walk-through gates and handheld wands for offices, schools, hotels and events, plus gold detectors for prospecting.", to: "/products/metal-detectors", cta: "Metal detectors", photo: "photo-1694140938935-96d37f5ff7f0", alt: "People walking through a security screening gate" },
-  { kicker: "Walkie-talkies & radios", title: "Keep your team talking.", text: "Motorola and Baofeng radios for guards, building sites and events, programmed and ready to use.", to: "/products/walkie-talkies", cta: "Walkie-talkies", photo: "photo-1789288046242-5a2a4ae14889", alt: "Baofeng radio clipped to a backpack strap" },
-  { kicker: "Alarms & sensors", title: "Know the moment someone breaks in.", text: "Intruder alarms and beam sensors for doors, walls and perimeters, loud on site and on your phone.", to: "/products/alarms-sensors", cta: "Alarms & sensors", photo: "photo-1767741683084-08ac01518c8c", alt: "Red alarm bell on a brick wall" },
-  { kicker: "Parking, traffic & queues", title: "Move every car in order.", text: "Boom barriers, turnstiles, parking and queue systems for estates, hospitals and offices.", to: "/products/parking-traffic", cta: "Parking & traffic", photo: "photo-1761707054382-6956707c3747", alt: "Boom barrier at a parking entrance" },
-  { kicker: "Safety & guard equipment", title: "Equip your premises properly.", text: "Fire extinguishers, batons and everyday gear for guards and premises.", to: "/products/safety-guard", cta: "Safety & guard", photo: "photo-1592838754746-4af9f09f526f", alt: "Fire extinguisher mounted on a wall" },
-  { kicker: "Convex mirrors", title: "See around every corner.", text: "Safety mirrors for blind corners, driveways, shops and parking.", to: "/products/convex-mirrors", cta: "Convex mirrors", photo: "photo-1781177257765-e19b3e7ef1b7", alt: "Convex road mirror against a blue sky" },
+  { kicker: "Access control & attendance", title: "Only the right people get in.", text: "Fingerprint, card and face terminals for doors and staff time, with reports your HR can use.", to: "/products/access-control", cta: "Access control", photo: "/hero/access-control.jpg", alt: "Man using a fingerprint reader at an office door" },
+  { kicker: "Smart locks", title: "No more lost keys.", text: "Keyless locks for homes, hotels and aluminium doors. Open with a fingerprint, a code, a card or your phone.", to: "/products/smart-locks", cta: "Smart locks", photo: "/hero/smart-locks.jpg", alt: "Smart lock with keypad and fingerprint reader fitted on a door" },
+  { kicker: "Parking, traffic & queues", title: "Move every car in order.", text: "Boom barriers, turnstiles, parking and queue systems for estates, hospitals and offices.", to: "/products/parking-traffic", cta: "Parking & traffic", photo: "/hero/parking-traffic.jpg", alt: "Boom barrier and ticket machine in a parking garage" },
+  { kicker: "Safety & guard equipment", title: "Equip your premises properly.", text: "Fire extinguishers, batons and everyday gear for guards and premises.", to: "/products/safety-guard", cta: "Safety & guard", photo: "/hero/safety-guard.jpg", alt: "Fire extinguisher mounted on an office wall" },
+  { kicker: "Convex mirrors", title: "See around every corner.", text: "Safety mirrors for blind corners, driveways, shops and parking.", to: "/products/convex-mirrors", cta: "Convex mirrors", photo: "/hero/convex-mirrors.jpg", alt: "Convex mirror showing the road around a corner" },
 ];
 
 const SLIDE_MS = 4000;
 
-const photoUrl = (id: string, w: number) =>
-  id.startsWith("/") ? id : `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${Math.round(w * 0.72)}&q=70`;
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(() => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -108,14 +101,12 @@ export default function Hero() {
           </div>
 
           {/* Photo */}
-          <div className="relative order-1 aspect-[25/18] overflow-hidden rounded-[24px] bg-ink-soft ring-1 ring-white/10 lg:order-2 lg:rounded-[32px]">
+          <div className="relative order-1 aspect-[4/3] w-full overflow-hidden rounded-[24px] bg-ink-soft ring-1 ring-white/10 sm:aspect-square lg:order-2 lg:max-w-[540px] lg:justify-self-end lg:rounded-[32px]">
             {SLIDES.map((s, i) =>
               loaded.has(i) ? (
                 <img
                   key={s.photo}
-                  src={photoUrl(s.photo, 1100)}
-                  srcSet={s.photo.startsWith("/") ? undefined : `${photoUrl(s.photo, 640)} 640w, ${photoUrl(s.photo, 1100)} 1100w`}
-                  sizes="(min-width: 1024px) 640px, 100vw"
+                  src={s.photo}
                   alt={i === index ? s.alt : ""}
                   aria-hidden={i !== index}
                   loading={i === 0 ? "eager" : "lazy"}
