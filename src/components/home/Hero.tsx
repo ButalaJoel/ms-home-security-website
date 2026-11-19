@@ -2,31 +2,30 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, BadgeCheck, ChevronLeft, ChevronRight, ShieldCheck, Truck } from "lucide-react";
 
-// Product slider in the style of the Peacock site's hero: words on the left, a real product
-// from our catalogue on the right, and prev / dots / next underneath. One slide per category,
-// 4 seconds each. Photos are our own product photos (Cloudinary from the POS, or /public).
-// To change a slide's product, paste its photo link from the POS into `photo`.
+// Photo slider in the style of the Peacock site's hero: words on the left, a photo of the
+// category's products in use on the right, and prev / dots / next underneath. One slide per
+// category, 4 seconds each. Photos are free-licence Unsplash images (images.unsplash.com is
+// allowed in the CSP in vercel.json). To use our own installation photos, put them in
+// /public/hero/ and set `photo` to e.g. "/hero/cctv.jpg".
 
-interface Slide { kicker: string; title: string; text: string; to: string; cta: string; photo: string; product: string }
-
-const C = "https://res.cloudinary.com/kwgvxjnb/image/upload/";
+interface Slide { kicker: string; title: string; text: string; to: string; cta: string; photo: string; alt: string }
 
 const SLIDES: Slide[] = [
-  { kicker: "CCTV cameras", title: "Watch every floor, from your phone.", text: "Hikvision cameras for homes, shops and storeyed buildings, with recording and phone viewing set up before we leave.", to: "/products/cctv-cameras", cta: "Shop CCTV cameras", photo: C + "v1794754368/ms-home-security-pos/products/hvljx3rj4prcyqzalhw4.jpg", product: "Hikvision 12MP AcuSense Bullet Camera" },
-  { kicker: "Access control & attendance", title: "Only the right people get in.", text: "Fingerprint, card and face terminals from ZKTeco for doors and staff time, with reports your HR can use.", to: "/products/access-control", cta: "Access control", photo: C + "v1794757708/ms-home-security-pos/products/dspgrzddday3vrwulu7m.png", product: "ZKTeco F22 Biometric Access Control" },
-  { kicker: "Smart locks", title: "No more lost keys.", text: "Keyless locks for homes, hotels and aluminium doors. Open with a fingerprint, a code, a card or your phone.", to: "/products/smart-locks", cta: "Smart locks", photo: C + "v1794779615/ms-home-security-pos/products/ovonkndgszgqazzxhooq.png", product: "Home Smart Lock" },
-  { kicker: "Metal & gold detectors", title: "From security checks to gold.", text: "Garrett walk-through gates and wands for entrances, and Minelab, Fisher and Gold Hunter detectors for prospecting.", to: "/products/metal-detectors", cta: "Metal detectors", photo: "/product-photos/minelab-gpx-6000.jpg", product: "Minelab GPX 6000 Gold Detector" },
-  { kicker: "Walkie-talkies & radios", title: "Keep your team talking.", text: "Motorola and Baofeng radios for guards, building sites and events, programmed and ready to use.", to: "/products/walkie-talkies", cta: "Walkie-talkies", photo: C + "v1794757715/ms-home-security-pos/products/emp1shci5hgehp02rn31.jpg", product: "Motorola XiR P8600i Walkie-Talkie" },
-  { kicker: "Alarms & sensors", title: "Know the moment someone breaks in.", text: "Intruder alarms and beam sensors for doors, walls and perimeters, loud on site and on your phone.", to: "/products/alarms-sensors", cta: "Alarms & sensors", photo: C + "v1794774258/ms-home-security-pos/products/wmsftlmuzdqrbz3nqx98.jpg", product: "Hikvision AX PRO Alarm Kit" },
-  { kicker: "Parking, traffic & queues", title: "Move every car in order.", text: "Boom barriers, turnstiles, parking and queue systems for estates, hospitals and offices.", to: "/products/parking-traffic", cta: "Parking & traffic", photo: C + "v1794779621/ms-home-security-pos/products/bgfw78kic2jxieon82dp.jpg", product: "Boom Barrier" },
-  { kicker: "Safety & guard equipment", title: "Equip your guards properly.", text: "Fire extinguishers, batons and everyday gear for guards and premises.", to: "/products/safety-guard", cta: "Safety & guard", photo: C + "v1794854162/ms-home-security-pos/products/ugkvkmzzxmzvcuhl5a9t.jpg", product: "GLORIA 6L Foam Fire Extinguisher" },
-  { kicker: "Convex mirrors", title: "See around every corner.", text: "Safety mirrors for blind corners, driveways, shops and parking.", to: "/products/convex-mirrors", cta: "Convex mirrors", photo: C + "v1794854090/ms-home-security-pos/products/oylep29cbpokiif7mmlq.jpg", product: "Convex Mirror 60cm" },
+  { kicker: "CCTV cameras", title: "Watch every floor, from your phone.", text: "Hikvision cameras for homes, shops and storeyed buildings, with recording and phone viewing set up before we leave.", to: "/products/cctv-cameras", cta: "Shop CCTV cameras", photo: "photo-1767059439535-10d3f5e6ad35", alt: "Security camera on a pole in front of an office building" },
+  { kicker: "Access control & attendance", title: "Only the right people get in.", text: "Fingerprint, card and face terminals for doors and staff time, with reports your HR can use.", to: "/products/access-control", cta: "Access control", photo: "photo-1776329255945-15212b50cd7f", alt: "Hikvision face recognition terminal mounted at a door" },
+  { kicker: "Smart locks", title: "No more lost keys.", text: "Keyless locks for homes, hotels and aluminium doors. Open with a fingerprint, a code, a card or your phone.", to: "/products/smart-locks", cta: "Smart locks", photo: "photo-1592933517664-ef7151097c5f", alt: "Keypad lock fitted on a door" },
+  { kicker: "Metal detectors", title: "Screen every entrance.", text: "Walk-through gates and handheld wands for offices, schools, hotels and events, plus gold detectors for prospecting.", to: "/products/metal-detectors", cta: "Metal detectors", photo: "photo-1694140938935-96d37f5ff7f0", alt: "People walking through a security screening gate" },
+  { kicker: "Walkie-talkies & radios", title: "Keep your team talking.", text: "Motorola and Baofeng radios for guards, building sites and events, programmed and ready to use.", to: "/products/walkie-talkies", cta: "Walkie-talkies", photo: "photo-1789288046242-5a2a4ae14889", alt: "Baofeng radio clipped to a backpack strap" },
+  { kicker: "Alarms & sensors", title: "Know the moment someone breaks in.", text: "Intruder alarms and beam sensors for doors, walls and perimeters, loud on site and on your phone.", to: "/products/alarms-sensors", cta: "Alarms & sensors", photo: "photo-1767741683084-08ac01518c8c", alt: "Red alarm bell on a brick wall" },
+  { kicker: "Parking, traffic & queues", title: "Move every car in order.", text: "Boom barriers, turnstiles, parking and queue systems for estates, hospitals and offices.", to: "/products/parking-traffic", cta: "Parking & traffic", photo: "photo-1761707054382-6956707c3747", alt: "Boom barrier at a parking entrance" },
+  { kicker: "Safety & guard equipment", title: "Equip your premises properly.", text: "Fire extinguishers, batons and everyday gear for guards and premises.", to: "/products/safety-guard", cta: "Safety & guard", photo: "photo-1592838754746-4af9f09f526f", alt: "Fire extinguisher mounted on a wall" },
+  { kicker: "Convex mirrors", title: "See around every corner.", text: "Safety mirrors for blind corners, driveways, shops and parking.", to: "/products/convex-mirrors", cta: "Convex mirrors", photo: "photo-1781177257765-e19b3e7ef1b7", alt: "Convex road mirror against a blue sky" },
 ];
 
 const SLIDE_MS = 4000;
 
-/** Cloudinary photos are resized on the fly; local ones are already 1200 px squares. */
-const photoUrl = (src: string, w: number) => (src.startsWith(C) ? src.replace("/upload/", `/upload/w_${w},h_${w},c_pad,b_white,f_auto,q_auto/`) : src);
+const photoUrl = (id: string, w: number) =>
+  id.startsWith("/") ? id : `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${Math.round(w * 0.72)}&q=70`;
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(() => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -109,27 +108,27 @@ export default function Hero() {
           </div>
 
           {/* Photo */}
-          <div className="relative order-1 aspect-[25/18] overflow-hidden rounded-[24px] bg-white ring-1 ring-white/10 lg:order-2 lg:rounded-[32px]">
+          <div className="relative order-1 aspect-[25/18] overflow-hidden rounded-[24px] bg-ink-soft ring-1 ring-white/10 lg:order-2 lg:rounded-[32px]">
             {SLIDES.map((s, i) =>
               loaded.has(i) ? (
                 <img
                   key={s.photo}
-                  src={photoUrl(s.photo, 900)}
-                  srcSet={s.photo.startsWith(C) ? `${photoUrl(s.photo, 500)} 500w, ${photoUrl(s.photo, 900)} 900w` : undefined}
-                  sizes="(min-width: 1024px) 460px, 70vw"
-                  alt={i === index ? s.product : ""}
+                  src={photoUrl(s.photo, 1100)}
+                  srcSet={s.photo.startsWith("/") ? undefined : `${photoUrl(s.photo, 640)} 640w, ${photoUrl(s.photo, 1100)} 1100w`}
+                  sizes="(min-width: 1024px) 640px, 100vw"
+                  alt={i === index ? s.alt : ""}
                   aria-hidden={i !== index}
                   loading={i === 0 ? "eager" : "lazy"}
                   fetchPriority={i === 0 ? "high" : "auto"}
                   decoding="async"
-                  className={"absolute inset-0 h-full w-full object-contain p-6 pb-12 text-transparent sm:p-10 sm:pb-14 " + (reducedMotion ? "" : "transition-opacity duration-700 ") + (i === index ? "opacity-100" : "opacity-0")}
+                  className={"absolute inset-0 h-full w-full object-cover text-transparent " + (reducedMotion ? "" : "transition-opacity duration-700 ") + (i === index ? "opacity-100" : "opacity-0")}
                 />
               ) : null,
             )}
-            <div className="absolute inset-x-3 bottom-3 flex items-center gap-2 text-[12.5px] font-semibold">
-              <span className="shrink-0 rounded-full bg-ink px-3 py-1 text-white">{index + 1} / {SLIDES.length}</span>
-              <span className="truncate text-ink-soft">{slide.product}</span>
-            </div>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/45 to-transparent" />
+            <span className="absolute bottom-3 left-4 rounded-full bg-black/45 px-3 py-1 text-[12px] font-semibold backdrop-blur-sm">
+              {index + 1} / {SLIDES.length}
+            </span>
           </div>
         </div>
 
