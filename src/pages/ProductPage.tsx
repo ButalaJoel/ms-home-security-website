@@ -61,7 +61,7 @@ export default function ProductPage() {
     { label: "Category", value: product.category },
   ];
   const hasOverview = !!(product.description || product.features?.length);
-  const waText = `Hello MS Security Systems, I'd like to order ${qty} × ${product.name}${product.model ? " (" + product.model + ")" : ""}.`;
+  const waText = `Hello MS Security Systems Ltd, I'd like to order ${qty} × ${product.name}${product.model ? " (" + product.model + ")" : ""}.`;
 
   return (
     <>

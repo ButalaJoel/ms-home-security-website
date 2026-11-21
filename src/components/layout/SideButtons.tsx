@@ -19,7 +19,7 @@ export default function SideButtons() {
   return (
     <div className="fixed bottom-4 right-3 z-30 flex flex-col gap-2 sm:bottom-6 sm:right-5 sm:gap-2.5">
       {business.whatsapp && (
-        <a href={whatsappLink(business.whatsapp, "Hello MS Security Systems, ")} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp us" className={base + " !bg-[#25D366] !text-white !ring-0 hover:!bg-[#1ebe5b]"}>
+        <a href={whatsappLink(business.whatsapp, "Hello MS Security Systems Ltd, ")} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp us" className={base + " !bg-[#25D366] !text-white !ring-0 hover:!bg-[#1ebe5b]"}>
           <WhatsAppIcon className="h-6 w-6" /><span className={tip}>WhatsApp us</span>
         </a>
       )}
