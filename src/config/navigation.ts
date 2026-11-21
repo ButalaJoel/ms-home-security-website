@@ -27,7 +27,7 @@ export const NAV: NavMenu[] = [
     id: "products", label: "Products", kind: "products", tabs: [],
     tools: [
       { label: "Shop all products", to: "/products" },
-      { label: "CCTV planner", to: "/cctv-planner" },
+      // CCTV planner hidden until it is built: { label: "CCTV planner", to: "/cctv-planner" },
       { label: "Request installation", to: "/installation#request" },
       { label: "Track my order", to: "/track-order" },
     ],

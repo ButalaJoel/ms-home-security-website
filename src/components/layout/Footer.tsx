@@ -31,7 +31,7 @@ export default function Footer() {
           <ul className={list}>
             <li><Link to="/installation" className={link}>Installation</Link></li>
             <li><Link to="/installation#request" className={link}>Request a site survey</Link></li>
-            <li><Link to="/cctv-planner" className={link}>CCTV planner</Link></li>
+            {/* CCTV planner hidden until it is built */}
             <li><Link to="/track-order" className={link}>Track my order</Link></li>
             <li><Link to="/become-a-distributor" className={link}>Become a distributor</Link></li>
           </ul>
