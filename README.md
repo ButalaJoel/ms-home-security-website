@@ -1,4 +1,4 @@
-# MS Home Security Solutions: public website
+# MS Security Systems Ltd: public website
 
 The public shop and information website. It is a separate app from the staff POS (`ms-home-security-pos`) and reads products, prices, stock labels and business details from the POS server's public API.
 
