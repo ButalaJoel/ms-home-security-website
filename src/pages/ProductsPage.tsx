@@ -32,7 +32,7 @@ export default function ProductsPage() {
   const category = slug ? categoryBySlug(slug) : undefined;
   usePageMeta({
     title: category ? category.name : slug ? "Page not found" : "All products",
-    description: category ? `${category.blurb} Delivery and installation anywhere in Uganda.` : "Shop CCTV cameras, access control, smart locks, metal detectors, walkie-talkies, alarms and parking systems from MS Home Security in Kampala.",
+    description: category ? `${category.blurb} Delivery and installation anywhere in Uganda.` : "Shop CCTV cameras, access control, smart locks, metal detectors, walkie-talkies, alarms and parking systems from MS Security Systems Ltd in Kampala.",
     noindex: !!slug && !category,
   });
   const { products, loading, error, reload } = useShop();
